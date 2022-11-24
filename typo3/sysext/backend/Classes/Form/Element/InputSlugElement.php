@@ -97,11 +97,10 @@ class InputSlugElement extends AbstractFormElement
         $fieldInformationHtml = $fieldInformationResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
 
-        // readOnly is not supported as columns config but might be set by SingleFieldContainer in case
-        // "l10n_display" is set to "defaultAsReadonly". To prevent misbehaviour for fields, which falsely
-        // set this, we also check for "defaultAsReadonly" being set and whether the record is an overlay.
+        // Disable field if "readOnly" is true or "l10n_display" is set to "defaultAsReadonly" by  SingleFieldContainer.
+        // We also check for "defaultAsReadonly" being set and whether the record is an overlay.
         if (($config['readOnly'] ?? false)
-            && ($this->data['processedTca']['ctrl']['transOrigPointerField'] ?? false)
+            || ($this->data['processedTca']['ctrl']['transOrigPointerField'] ?? false)
             && ($row[$this->data['processedTca']['ctrl']['transOrigPointerField']][0] ?? $row[$this->data['processedTca']['ctrl']['transOrigPointerField']] ?? false)
             && GeneralUtility::inList($parameterArray['fieldConf']['l10n_display'] ?? '', 'defaultAsReadonly')
         ) {
